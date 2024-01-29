@@ -80,6 +80,13 @@ const ExcalidrawBase = (props: ExcalidrawProps) => {
   }
 
   useEffect(() => {
+    const importPolyfill = async () => {
+      //@ts-ignore
+      await import("canvas-roundrect-polyfill");
+    };
+
+    importPolyfill();
+
     // Block pinch-zooming on iOS outside of the content area
     const handleTouchMove = (event: TouchEvent) => {
       // @ts-ignore
@@ -225,7 +232,7 @@ export {
 
 export { isLinearElement } from "./element/typeChecks";
 
-export { FONT_FAMILY, THEME, MIME_TYPES } from "./constants";
+export { FONT_FAMILY, THEME, MIME_TYPES, ROUNDNESS } from "./constants";
 
 export {
   mutateElement,
