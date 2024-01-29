@@ -24,8 +24,8 @@ import { rescalePoints } from "../points";
 import { getBoundTextElement, getContainerElement } from "./textElement";
 import { LinearElementEditor } from "./linearElementEditor";
 import { Mutable } from "../utility-types";
-import { ShapeCache } from "../scene/ShapeCache";
-import Scene from "../scene/Scene";
+// import { ShapeCache } from "../scene/ShapeCache";
+//import Scene from "../scene/Scene";
 
 export type RectangleBox = {
   x: number;
@@ -75,16 +75,16 @@ export class ElementBounds {
     ) {
       return cachedBounds.bounds;
     }
-    const scene = Scene.getScene(element);
-    const bounds = ElementBounds.calculateBounds(
-      element,
-      scene?.getNonDeletedElementsMap() || new Map(),
-    );
+    // const scene = Scene.getScene(element);
+    // const bounds = ElementBounds.calculateBounds(
+    //   element,
+    //   scene?.getNonDeletedElementsMap() || new Map(),
+    // );
 
     // hack to ensure that downstream checks could retrieve element Scene
     // so as to have correctly calculated bounds
     // FIXME remove when we get rid of all the id:Scene / element:Scene mapping
-    const shouldCache = !!scene;
+    const shouldCache = false;
 
     if (shouldCache) {
       ElementBounds.boundsCache.set(element, {

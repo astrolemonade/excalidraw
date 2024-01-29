@@ -33,10 +33,6 @@ import {
   getInitializedImageElements,
   updateImageCache,
 } from "../element/image";
-<<<<<<< HEAD
-import { elementsOverlappingBBox } from "../../utils/index";
-=======
->>>>>>> origin/master
 import {
   getElementsOverlappingFrame,
   getFrameLikeElements,

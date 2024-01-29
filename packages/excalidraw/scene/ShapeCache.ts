@@ -4,8 +4,8 @@ import type {
   ExcalidrawElement,
   ExcalidrawSelectionElement,
 } from "../element/types";
-import { elementWithCanvasCache } from "../renderer/renderElement";
-import { _generateElementShape } from "./Shape";
+// import { elementWithCanvasCache } from "../renderer/renderElement";
+// import { _generateElementShape } from "./Shape";
 import type { ElementShape, ElementShapes } from "./types";
 import { COLOR_PALETTE } from "../colors";
 import { AppState, EmbedsValidationStatus } from "../types";

@@ -1,4 +1,4 @@
-import { getElementBounds } from "../shared/element/bounds";
+import { getElementBounds } from "../excalidraw/element/bounds";
 
 import { isValueInRange, rotatePoint } from "../shared/math";
 import {

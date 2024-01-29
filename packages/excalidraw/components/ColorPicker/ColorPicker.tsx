@@ -16,7 +16,7 @@ import { t } from "../../i18n";
 import clsx from "clsx";
 import { jotaiScope } from "../../jotai";
 import { ColorInput } from "./ColorInput";
-import { useRef } from "react";
+//import { useRef } from "react";
 import { activeEyeDropperAtom } from "../EyeDropper";
 
 import "./ColorPicker.scss";
