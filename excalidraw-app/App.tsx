@@ -30,7 +30,6 @@ import {
 } from "../packages/excalidraw/index";
 import {
   AppState,
-  LibraryItems,
   ExcalidrawImperativeAPI,
   BinaryFiles,
   ExcalidrawInitialDataState,
@@ -64,7 +63,6 @@ import {
   loadScene,
 } from "./data";
 import {
-  getLibraryItemsFromStorage,
   importFromLocalStorage,
   importUsernameFromLocalStorage,
 } from "./data/localStorage";
@@ -82,7 +80,7 @@ import { updateStaleImageStatuses } from "./data/FileManager";
 import { newElementWith } from "../packages/excalidraw/element/mutateElement";
 import { isInitializedImageElement } from "../packages/excalidraw/element/typeChecks";
 import { loadFilesFromFirebase } from "./data/firebase";
-import { LocalData } from "./data/LocalData";
+import { libraryIndexedDBAdapter, LocalData } from "./data/LocalData";
 import { isBrowserStorageStateNewer } from "./data/tabSync";
 import clsx from "clsx";
 import { reconcileElements } from "./collab/reconciliation";
@@ -313,7 +311,7 @@ const ExcalidrawWrapper = () => {
 
   useHandleLibrary({
     excalidrawAPI,
-    getInitialLibraryItems: getLibraryItemsFromStorage,
+    adapter: libraryIndexedDBAdapter,
   });
 
   useEffect(() => {
@@ -443,8 +441,12 @@ const ExcalidrawWrapper = () => {
           excalidrawAPI.updateScene({
             ...localDataState,
           });
-          excalidrawAPI.updateLibrary({
-            libraryItems: getLibraryItemsFromStorage(),
+          libraryIndexedDBAdapter.load().then((data) => {
+            if (data) {
+              excalidrawAPI.updateLibrary({
+                libraryItems: data,
+              });
+            }
           });
           collabAPI?.setUsername(username || "");
         }
@@ -656,15 +658,6 @@ const ExcalidrawWrapper = () => {
     );
   };
 
-  const onLibraryChange = async (items: LibraryItems) => {
-    if (!items.length) {
-      localStorage.removeItem(STORAGE_KEYS.LOCAL_STORAGE_LIBRARY);
-      return;
-    }
-    const serializedItems = JSON.stringify(items);
-    localStorage.setItem(STORAGE_KEYS.LOCAL_STORAGE_LIBRARY, serializedItems);
-  };
-
   const isOffline = useAtomValue(isOfflineAtom);
 
   const onCollabDialogOpen = useCallback(
@@ -737,7 +730,6 @@ const ExcalidrawWrapper = () => {
         renderCustomStats={renderCustomStats}
         detectScroll={false}
         handleKeyboardGlobally={true}
-        onLibraryChange={onLibraryChange}
         autoFocus={true}
         theme={theme}
         renderTopRightUI={(isMobile) => {
