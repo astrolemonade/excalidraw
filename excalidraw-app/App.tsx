@@ -444,7 +444,7 @@ const ExcalidrawWrapper = () => {
           libraryIndexedDBAdapter.load().then((data) => {
             if (data) {
               excalidrawAPI.updateLibrary({
-                libraryItems: data,
+                libraryItems: data.libraryItems,
               });
             }
           });
