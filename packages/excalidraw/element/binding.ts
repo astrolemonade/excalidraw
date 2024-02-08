@@ -531,13 +531,14 @@ const maybeCalculateNewGapWhenScaling = (
 // TODO: this is a bottleneck, optimise
 export const getEligibleElementsForBinding = (
   elements: NonDeleted<ExcalidrawElement>[],
+  allElements: readonly NonDeletedExcalidrawElement[],
 ): SuggestedBinding[] => {
   const includedElementIds = new Set(elements.map(({ id }) => id));
   return elements.flatMap((element) =>
     isBindingElement(element, false)
       ? (getElligibleElementsForBindingElement(
           element as NonDeleted<ExcalidrawLinearElement>,
-          elements,
+          allElements,
         ).filter(
           (element) => !includedElementIds.has(element.id),
         ) as SuggestedBinding[])
