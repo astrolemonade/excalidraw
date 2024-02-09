@@ -4,8 +4,7 @@ import { getNonDeletedElements } from "../element";
 import {
   ExcalidrawElement,
   NonDeleted,
-  NonDeletedElementsMap,
-  NonDeletedSceneElementsMap,
+  NonDeletedExcalidrawElement,
 } from "../element/types";
 import { resizeMultipleElements } from "../element/resizeElements";
 import { AppState } from "../types";
@@ -27,9 +26,9 @@ export const actionFlipHorizontal = register({
       elements: updateFrameMembershipOfSelectedElements(
         flipSelectedElements(
           elements,
-          app.scene.getNonDeletedElementsMap(),
           appState,
           "horizontal",
+          app.scene.getNonDeletedElements(),
         ),
         appState,
         app,
@@ -50,9 +49,9 @@ export const actionFlipVertical = register({
       elements: updateFrameMembershipOfSelectedElements(
         flipSelectedElements(
           elements,
-          app.scene.getNonDeletedElementsMap(),
           appState,
           "vertical",
+          app.scene.getNonDeletedElements(),
         ),
         appState,
         app,
@@ -68,9 +67,10 @@ export const actionFlipVertical = register({
 
 const flipSelectedElements = (
   elements: readonly ExcalidrawElement[],
-  elementsMap: NonDeletedElementsMap | NonDeletedSceneElementsMap,
+
   appState: Readonly<AppState>,
   flipDirection: "horizontal" | "vertical",
+  allElements: readonly NonDeletedExcalidrawElement[],
 ) => {
   const selectedElements = getSelectedElements(
     getNonDeletedElements(elements),
@@ -83,9 +83,9 @@ const flipSelectedElements = (
 
   const updatedElements = flipElements(
     selectedElements,
-    elementsMap,
     appState,
     flipDirection,
+    allElements,
   );
 
   const updatedElementsMap = arrayToMap(updatedElements);
@@ -97,12 +97,12 @@ const flipSelectedElements = (
 
 const flipElements = (
   selectedElements: NonDeleted<ExcalidrawElement>[],
-  elementsMap: NonDeletedElementsMap | NonDeletedSceneElementsMap,
   appState: AppState,
   flipDirection: "horizontal" | "vertical",
+  allElements: readonly NonDeletedExcalidrawElement[],
 ): ExcalidrawElement[] => {
   const { minX, minY, maxX, maxY } = getCommonBoundingBox(selectedElements);
-
+  const elementsMap = arrayToMap(allElements);
   resizeMultipleElements(
     elementsMap,
     selectedElements,
@@ -115,7 +115,7 @@ const flipElements = (
 
   (isBindingEnabled(appState)
     ? bindOrUnbindSelectedElements
-    : unbindLinearElements)(selectedElements);
+    : unbindLinearElements)(selectedElements, allElements);
 
   return selectedElements;
 };
