@@ -51,12 +51,17 @@ export const getElementsWithinSelection = (
     getElementAbsoluteCoords(selection, elementsMap);
 
   let elementsInSelection = elements.filter((element) => {
-    let [elementX1, elementY1, elementX2, elementY2] =
-      getElementBounds(element);
+    let [elementX1, elementY1, elementX2, elementY2] = getElementBounds(
+      element,
+      elementsMap,
+    );
 
     const containingFrame = getContainingFrame(element);
     if (containingFrame) {
-      const [fx1, fy1, fx2, fy2] = getElementBounds(containingFrame);
+      const [fx1, fy1, fx2, fy2] = getElementBounds(
+        containingFrame,
+        elementsMap,
+      );
 
       elementX1 = Math.max(fx1, elementX1);
       elementY1 = Math.max(fy1, elementY1);
@@ -106,6 +111,7 @@ export const getVisibleAndNonSelectedElements = (
       appState.width,
       appState.height,
       appState,
+      arrayToMap(elements),
     );
 
     return !selectedElementsSet.has(element.id) && isVisible;

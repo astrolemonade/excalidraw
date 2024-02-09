@@ -951,6 +951,7 @@ class App extends React.Component<AppProps, AppState> {
             normalizedWidth,
             normalizedHeight,
             this.state,
+            this.scene.getNonDeletedElementsMap(),
           );
           const hasBeenInitialized = this.initializedEmbeds.has(el.id);
 
@@ -1285,6 +1286,7 @@ class App extends React.Component<AppProps, AppState> {
             scrollY: this.state.scrollY,
             zoom: this.state.zoom,
           },
+          this.scene.getNonDeletedElementsMap(),
         )
       ) {
         // if frame not visible, don't render its name
